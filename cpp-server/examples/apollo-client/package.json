@@ -1,0 +1,59 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=8.16.2",
+    "yarn": "^1.21.1"
+  },
+  "config": {
+    "measurements": "measurements"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.1.2",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link": "^1.2.14",
+    "apollo-link-http": "^1.5.17",
+    "apollo-link-ws": "^1.0.19",
+    "clipboardy": "^2.3.0",
+    "cross-fetch": "^3.0.5",
+    "dotenv-safe": "^8.2.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "graphql": "^14.6.0",
+    "graphql-tag": "^2.10.1",
+    "jsonwebtoken": "^8.5.1",
+    "subscriptions-transport-ws": "^0.9.16",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.8.3",
+    "ws": "^7.4.6",
+    "yargs": "^15.4.0"
+  },
+  "scripts": {
+    "start": "node -r dotenv-safe/config build/index.js",
+    "eslint": "eslint --max-warnings=0 --ext .ts .",
+    "tsc": "tsc -p tsconfig.json",
+    "ts-check": "tsc --noEmit",
+    "lint": "run-s eslint ts-check",
+    "build": "run-s eslint tsc",
+    "collect-statistics": "./collect-stats.sh $npm_package_config_measurements",
+    "start-performance": "PERFORMANCE_FILE=$npm_package_config_measurements run-p \"start {@}\" --",
+    "get-token": "run-p \"start --get-token\" --",
+    "update-permissions": "./update-permissions.sh"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/ws": "^7.2.6",
+    "@types/yargs": "^15.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.1.0",
+    "@typescript-eslint/parser": "^4.1.0",
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1"
+  }
+}

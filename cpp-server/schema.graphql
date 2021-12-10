@@ -1,0 +1,330 @@
+###############################################################################
+# DIRECTIVE
+###############################################################################
+enum HasPermissionsDirectivePolicy {
+  RESOLVER
+  THROW
+}
+
+directive @range(min: Float, max: Float) on FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+directive @hasPermissions(permissions: [String!]!, policy: HasPermissionsDirectivePolicy) on FIELD_DEFINITION | OBJECT | INPUT_FIELD_DEFINITION
+
+###############################################################################
+# CUSTOM_SCALAR
+###############################################################################
+scalar Int8
+scalar UInt8
+scalar Int16
+scalar UInt16
+scalar Int32
+scalar UInt32
+scalar Int64
+scalar UInt64
+
+###############################################################################
+# QUERY
+###############################################################################
+type Query {
+    vehicle: Vehicle
+}
+
+###############################################################################
+# SUBSCRIPTION
+###############################################################################
+enum SubscriptionDeliveryInterval {
+  """Rate limited: 5s between updates"""
+  DELIVERY_INTERVAL_5_SECONDS
+
+  """Rate limited: 1s between updates."""
+  DELIVERY_INTERVAL_1_SECOND
+
+  """Get all the updates, no rate limit."""
+  REALTIME
+}
+
+type Subscription {
+    vehicle(deliveryInterval: SubscriptionDeliveryInterval! = DELIVERY_INTERVAL_5_SECONDS): Vehicle @hasPermissions(permissions: ["Subscription.Vehicle.DELIVERY_INTERVAL_1_SECOND", "Subscription.Vehicle.REALTIME"])
+}
+
+###############################################################################
+# MUTATION
+###############################################################################
+type Mutation {
+    setVehicleCabinDoorRow1Left(input: Vehicle_Cabin_Door_Row1_Left_Input!): Vehicle_Cabin_Door_Row1_Left
+    setVehicleCabinDoorRow1Right(input: Vehicle_Cabin_Door_Row1_Right_Input!): Vehicle_Cabin_Door_Row1_Right
+    setVehicleCabinDoorRow2Left(input: Vehicle_Cabin_Door_Row2_Left_Input!): Vehicle_Cabin_Door_Row2_Left
+    setVehicleCabinDoorRow2Right(input: Vehicle_Cabin_Door_Row2_Right_Input!): Vehicle_Cabin_Door_Row2_Right
+    setVehicleCabinSeatRow1Pos1(input: Vehicle_Cabin_Seat_Row1_Pos1_Input!): Vehicle_Cabin_Seat_Row1_Pos1
+    setVehicleCabinSeatRow1Pos2(input: Vehicle_Cabin_Seat_Row1_Pos2_Input!): Vehicle_Cabin_Seat_Row1_Pos2
+    setVehicleCabinSeatRow2Pos1(input: Vehicle_Cabin_Seat_Row2_Pos1_Input!): Vehicle_Cabin_Seat_Row2_Pos1
+    setVehicleCabinSeatRow2Pos2(input: Vehicle_Cabin_Seat_Row2_Pos2_Input!): Vehicle_Cabin_Seat_Row2_Pos2
+}
+
+###############################################################################
+# INPUT
+###############################################################################
+"""
+All doors, including windows and switches
+"""
+input Vehicle_Cabin_Door_Row1_Left_Input {
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row1.Left.IsOpen_WRITE"])
+}
+
+"""
+All doors, including windows and switches
+"""
+input Vehicle_Cabin_Door_Row1_Right_Input {
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row1.Right.IsOpen_WRITE"])
+}
+
+"""
+All doors, including windows and switches
+"""
+input Vehicle_Cabin_Door_Row2_Left_Input {
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row2.Left.IsOpen_WRITE"])
+}
+
+"""
+All doors, including windows and switches
+"""
+input Vehicle_Cabin_Door_Row2_Right_Input {
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row2.Right.IsOpen_WRITE"])
+}
+
+"""
+All seats.
+"""
+input Vehicle_Cabin_Seat_Row1_Pos1_Input {
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row1.Pos1.Heating_WRITE"])
+}
+
+"""
+All seats.
+"""
+input Vehicle_Cabin_Seat_Row1_Pos2_Input {
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row1.Pos2.Heating_WRITE"])
+}
+
+"""
+All seats.
+"""
+input Vehicle_Cabin_Seat_Row2_Pos1_Input {
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row2.Pos1.Heating_WRITE"])
+}
+
+"""
+All seats.
+"""
+input Vehicle_Cabin_Seat_Row2_Pos2_Input {
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row2.Pos2.Heating_WRITE"])
+}
+
+###############################################################################
+# TYPE
+###############################################################################
+"""
+High-level vehicle data.
+"""
+type Vehicle {
+    cabin: Vehicle_Cabin
+    currentLocation: Vehicle_CurrentLocation
+    powertrain: Vehicle_Powertrain
+}
+
+"""
+All in-cabin components, including doors.
+"""
+type Vehicle_Cabin {
+    door: Vehicle_Cabin_Door
+
+    """ Number of doors in vehicle """
+    doorCount: UInt8 @hasPermissions(permissions: ["Vehicle.Cabin.DoorCount_READ"])
+    seat: Vehicle_Cabin_Seat
+}
+
+"""
+The current latitude and longitude of the vehicle.
+"""
+type Vehicle_CurrentLocation {
+
+    """ Current elevation of the position. """
+    altitude: Float @hasPermissions(permissions: ["Vehicle.CurrentLocation.Altitude_READ"])
+
+    """ Current latitude of vehicle. """
+    latitude: Float @range(min: -90.0, max: 90.0) @hasPermissions(permissions: ["Vehicle.CurrentLocation.Latitude_READ"])
+
+    """ Current longitude of vehicle. """
+    longitude: Float @range(min: -180.0, max: 180.0) @hasPermissions(permissions: ["Vehicle.CurrentLocation.Longitude_READ"])
+}
+
+"""
+Powertrain data for battery management, etc.
+"""
+type Vehicle_Powertrain {
+    combustionEngine: Vehicle_Powertrain_CombustionEngine
+    fuelSystem: Vehicle_Powertrain_FuelSystem
+    transmission: Vehicle_Powertrain_Transmission
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door {
+    row1: Vehicle_Cabin_Door_Row1
+    row2: Vehicle_Cabin_Door_Row2
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat {
+    row1: Vehicle_Cabin_Seat_Row1
+    row2: Vehicle_Cabin_Seat_Row2
+}
+
+"""
+Engine-specific data, stopping at the bell housing.
+"""
+type Vehicle_Powertrain_CombustionEngine {
+    engine: Vehicle_Powertrain_CombustionEngine_Engine
+}
+
+"""
+Fuel system data.
+"""
+type Vehicle_Powertrain_FuelSystem {
+
+    """ Current consumption in liters per 100 km. """
+    instantConsumption: Float @hasPermissions(permissions: ["Vehicle.Powertrain.FuelSystem.InstantConsumption_READ"])
+
+    """ Level in fuel tank as percent of capacity. 0 = empty. 100 = full. """
+    level: UInt8 @range(min: 0.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Powertrain.FuelSystem.Level_READ"])
+
+    """ Capacity of the fuel tank in liters """
+    tankCapacity: Float @hasPermissions(permissions: ["Vehicle.Powertrain.FuelSystem.TankCapacity_READ"])
+}
+
+"""
+Transmission-specific data, stopping at the drive shafts.
+"""
+type Vehicle_Powertrain_Transmission {
+
+    """ The current gear. 0=Neutral, 1/2/..=Forward, -1/..=Reverse """
+    currentGear: Int8 @hasPermissions(permissions: ["Vehicle.Powertrain.Transmission.CurrentGear_READ"])
+
+    """ Drive type. """
+    driveType: String @hasPermissions(permissions: ["Vehicle.Powertrain.Transmission.DriveType_READ"])
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row1 {
+    left: Vehicle_Cabin_Door_Row1_Left
+    right: Vehicle_Cabin_Door_Row1_Right
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row2 {
+    left: Vehicle_Cabin_Door_Row2_Left
+    right: Vehicle_Cabin_Door_Row2_Right
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row1 {
+    pos1: Vehicle_Cabin_Seat_Row1_Pos1
+    pos2: Vehicle_Cabin_Seat_Row1_Pos2
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row2 {
+    pos1: Vehicle_Cabin_Seat_Row2_Pos1
+    pos2: Vehicle_Cabin_Seat_Row2_Pos2
+}
+
+"""
+Engine signals
+"""
+type Vehicle_Powertrain_CombustionEngine_Engine {
+
+    """ Engine speed measured as rotations per minute. """
+    speed: UInt16 @range(min: 0.0, max: 20000.0) @hasPermissions(permissions: ["Vehicle.Powertrain.CombustionEngine.Engine.Speed_READ"])
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row1_Left {
+
+    """ Is door open or closed """
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row1.Left.IsOpen_READ"])
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row1_Right {
+
+    """ Is door open or closed """
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row1.Right.IsOpen_READ"])
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row2_Left {
+
+    """ Is door open or closed """
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row2.Left.IsOpen_READ"])
+}
+
+"""
+All doors, including windows and switches
+"""
+type Vehicle_Cabin_Door_Row2_Right {
+
+    """ Is door open or closed """
+    isOpen: Boolean @hasPermissions(permissions: ["Vehicle.Cabin.Door.Row2.Right.IsOpen_READ"])
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row1_Pos1 {
+
+    """ Seat cooling / heating. 0 = off. -100 = max cold. +100 = max heat. """
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row1.Pos1.Heating_READ"])
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row1_Pos2 {
+
+    """ Seat cooling / heating. 0 = off. -100 = max cold. +100 = max heat. """
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row1.Pos2.Heating_READ"])
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row2_Pos1 {
+
+    """ Seat cooling / heating. 0 = off. -100 = max cold. +100 = max heat. """
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row2.Pos1.Heating_READ"])
+}
+
+"""
+All seats.
+"""
+type Vehicle_Cabin_Seat_Row2_Pos2 {
+
+    """ Seat cooling / heating. 0 = off. -100 = max cold. +100 = max heat. """
+    heating: Int8 @range(min: -100.0, max: 100.0) @hasPermissions(permissions: ["Vehicle.Cabin.Seat.Row2.Pos2.Heating_READ"])
+}

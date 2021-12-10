@@ -1,0 +1,33 @@
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/cpp-server/**",
+        "/usr/local/include",
+        "/usr/include",
+        "${env:HOME}/usr/include/**",
+        "${env:HOME}/gqldeps/include/**"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/clang++",
+      "cStandard": "c99",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "clang-x64",
+      "compilerArgs": ["--std=c++17"],
+      "browse": {
+        "path": [
+          "/usr/include",
+          "/usr/local/include",
+          "${env:HOME}/usr/include",
+          "${workspaceFolder}/cpp-server/implementation",
+          "${workspaceFolder}/cpp-server/generated",
+          "${workspaceFolder}/cpp-server/src",
+          "${workspaceFolder}/cpp-server/examples/commonapi-usage-examples"
+        ]
+      }
+    }
+  ],
+  "version": 4
+}

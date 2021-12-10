@@ -1,0 +1,13 @@
+**.DS_Store
+vsomeip.log
+*.swp
+**/build*
+__pycache__
+node_modules
+.env
+yarn-error.log
+.venv
+.cache
+commonapi-wrappers/playground/*
+.vspec
+.depl

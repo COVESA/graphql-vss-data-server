@@ -1,0 +1,43 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pep8 = "*"
+autopep8 = "*"
+flake8 = "*"
+flake8-builtins = "*"
+flake8-colors = "*"
+flake8-comprehensions = "*"
+flake8-deprecated = "*"
+flake8-rst-docstrings = "*"
+flake8-requirements = "*"
+flake8-module-name = "*"
+flake8-tidy-imports = "*"
+flake8-print = "*"
+flake8-quotes = "*"
+flake8-eradicate = "*"
+flake8-import-order = "*"
+ipython = "*"
+pylint = "*"
+mypy = "*"
+nose = "*"
+typing-extensions = "*"
+types-pyyaml = "*"
+
+[packages]
+jinja2 = "*"
+graphql-core = "*"
+vss-tools = {git = "https://github.com/GENIVI/vss-tools.git", editable = true, ref = "master"}
+vss2graphql_schema = {git = "https://github.com/COVESA/vss2graphql_schema", ref = "master"}
+graphql_schema2cpp_codegen = {git = "https://github.com/profusion/vss_graphql_codegen.git", ref = "master"}
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+gen_vss_gql_schema = "vss2graphql_schema --range-directive --permission-directive --subscription-delivery-interval --custom-scalars --output=../resources/schema.graphql --layer=../resources/deploy/deploy/Vehicle.depl   ../resources/spec/spec/VehicleSignalSpecification.vspec"
+update_vss_gql_schema = "vss2graphql_schema --range-directive --permission-directive --subscription-delivery-interval --custom-scalars --output=schema.graphql --layer=../resources/deploy/deploy/Vehicle.depl ../resources/spec/spec/VehicleSignalSpecification.vspec"
+gen_vss_gql_code = "graphql_schema2cpp_codegen --graphql=../resources/schema.graphql --perms=../resources/permissions.yaml --layer=../resources/deploy/deploy/Vehicle.depl cppgraphqlgen --visibility_attribute=VEHICLE_API --header_open=../resources/vehicle_hpp_headers_open.hpp ../resources/Vehicle.cpp ../resources/Vehicle.hpp ../resources/permissions_symbols.hpp"
+update_vss_gql_code = "graphql_schema2cpp_codegen --graphql=schema.graphql --perms=generated/permissions.yaml --layer=../resources/deploy/deploy/Vehicle.depl cppgraphqlgen --visibility_attribute=VEHICLE_API --header_open=../resources/vehicle_hpp_headers_open.hpp generated/Vehicle.cpp generated/Vehicle.hpp generated/permissions_symbols.hpp"
