@@ -80,7 +80,7 @@ while true; do
         ;;
     --install-prefix | i)
         INSTALL_PATH="$2"
-        shift2
+        shift 2
         ;;
     --help | -h)
         show_help
