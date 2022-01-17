@@ -138,6 +138,7 @@ target_include_directories(
   commonapi_glue
   INTERFACE
   ${COMMONAPI_INCLUDE_DIRS}
+  ${DLT_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/generated
   ${CMAKE_CURRENT_SOURCE_DIR}/../commonapi-wrappers/playground/include
 )

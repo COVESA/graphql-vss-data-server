@@ -23,6 +23,7 @@ target_link_libraries(
 target_include_directories(
   implementation
   PUBLIC
+  ${DLT_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/../commonapi-wrappers/playground/include
   ${CMAKE_CURRENT_SOURCE_DIR}
 )
