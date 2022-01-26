@@ -26,7 +26,7 @@ source "$GIT_ROOT"/scripts/install_dependencies/bin/load_helpers_and_variables.s
 
 skip_if_installed websocketpp
 
-git_clone_and_cd https://github.com/zaphoyd/websocketpp.git "$DEFAULT_BRANCH" "${CLONE_SHALLOW_SINGLE_BRANCH[@]}"
+git_clone_and_cd https://github.com/zaphoyd/websocketpp.git "$WEBSOCKETPPTAG" "${CLONE_SHALLOW_SINGLE_BRANCH[@]}"
 mkdir -p build
 cd build
 cmake "${CMAKE_OPTIONS[@]}" ..

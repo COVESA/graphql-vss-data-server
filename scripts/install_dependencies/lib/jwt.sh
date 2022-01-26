@@ -26,7 +26,7 @@ source "$GIT_ROOT"/scripts/install_dependencies/bin/load_helpers_and_variables.s
 skip_if_installed jwt-cpp
 
 sudo apt install -y libssl-dev
-git_clone_and_cd https://github.com/Thalhammer/jwt-cpp.git "$DEFAULT_BRANCH" "${CLONE_SHALLOW_SINGLE_BRANCH[@]}"
+git_clone_and_cd https://github.com/Thalhammer/jwt-cpp.git "$JWT_CPPTAG" "${CLONE_SHALLOW_SINGLE_BRANCH[@]}"
 mkdir -p build
 cd build
 cmake "${CMAKE_OPTIONS[@]}" ..

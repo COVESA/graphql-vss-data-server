@@ -28,6 +28,8 @@ export BOOST_RELEASE=https://boostorg.jfrog.io/artifactory/main/release/1.71.0/s
 export CPPGRAPHQLGENTAG=v3.6.0
 export DEFAULT_BRANCH=master
 export COMMONAPI_RELEASE=3.2
+export JWT_CPPTAG=v0.5.1
+export WEBSOCKETPPTAG=0.8.2
 
 # IUK Interface version
 export IUK_INTERFACE_VERSION=35
